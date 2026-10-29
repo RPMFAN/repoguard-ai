@@ -1,0 +1,112 @@
+{
+  "tool": "RepoGuard AI heuristic scanner v1.1.0",
+  "repoName": "OWASP/NodeGoat @ c5cb68a",
+  "scannedAt": "2026-10-29T17:19:54.651Z",
+  "filesScanned": 49,
+  "totalFindings": 9,
+  "high": 7,
+  "medium": 2,
+  "low": 0,
+  "note": "Automated pattern matches. Each item is a lead to be confirmed by manual review; false positives are expected.",
+  "findings": [
+    {
+      "ruleId": "RG-SEC-001",
+      "severity": "HIGH",
+      "category": "Code injection",
+      "file": "app/routes/contributions.js",
+      "line": 32,
+      "snippet": "const preTax = eval(req.body.preTax);",
+      "description": "Dynamic code evaluation; dangerous if any user input reaches it.",
+      "remediation": "Remove eval/new Function; parse input explicitly (e.g. JSON.parse, parseInt) and validate it.",
+      "status": "unconfirmed lead"
+    },
+    {
+      "ruleId": "RG-SEC-001",
+      "severity": "HIGH",
+      "category": "Code injection",
+      "file": "app/routes/contributions.js",
+      "line": 33,
+      "snippet": "const afterTax = eval(req.body.afterTax);",
+      "description": "Dynamic code evaluation; dangerous if any user input reaches it.",
+      "remediation": "Remove eval/new Function; parse input explicitly (e.g. JSON.parse, parseInt) and validate it.",
+      "status": "unconfirmed lead"
+    },
+    {
+      "ruleId": "RG-SEC-001",
+      "severity": "HIGH",
+      "category": "Code injection",
+      "file": "app/routes/contributions.js",
+      "line": 34,
+      "snippet": "const roth = eval(req.body.roth);",
+      "description": "Dynamic code evaluation; dangerous if any user input reaches it.",
+      "remediation": "Remove eval/new Function; parse input explicitly (e.g. JSON.parse, parseInt) and validate it.",
+      "status": "unconfirmed lead"
+    },
+    {
+      "ruleId": "RG-SEC-003",
+      "severity": "HIGH",
+      "category": "Hard-coded secret",
+      "file": "config/env/all.js",
+      "line": 8,
+      "snippet": "cookieSecret: \"session_cookie_secret_key_here\",",
+      "description": "Possible credential committed to source control.",
+      "remediation": "Move secrets to environment variables or a secret manager and rotate the exposed value.",
+      "status": "unconfirmed lead"
+    },
+    {
+      "ruleId": "RG-SEC-003",
+      "severity": "HIGH",
+      "category": "Hard-coded secret",
+      "file": "config/env/development.js",
+      "line": 6,
+      "snippet": "zapApiKey: \"v9dn0balpqas1pcc281tn5ood1\",",
+      "description": "Possible credential committed to source control.",
+      "remediation": "Move secrets to environment variables or a secret manager and rotate the exposed value.",
+      "status": "unconfirmed lead"
+    },
+    {
+      "ruleId": "RG-SEC-003",
+      "severity": "HIGH",
+      "category": "Hard-coded secret",
+      "file": "config/env/test.js",
+      "line": 6,
+      "snippet": "zapApiKey: \"v9dn0balpqas1pcc281tn5ood1\",",
+      "description": "Possible credential committed to source control.",
+      "remediation": "Move secrets to environment variables or a secret manager and rotate the exposed value.",
+      "status": "unconfirmed lead"
+    },
+    {
+      "ruleId": "RG-SEC-003",
+      "severity": "HIGH",
+      "category": "Hard-coded secret",
+      "file": "test/security/profile-test.js",
+      "line": 37,
+      "snippet": "var sutUserPassword = \"User1_123\";",
+      "description": "Possible credential committed to source control.",
+      "remediation": "Move secrets to environment variables or a secret manager and rotate the exposed value.",
+      "status": "unconfirmed lead"
+    },
+    {
+      "ruleId": "RG-SEC-005",
+      "severity": "MEDIUM",
+      "category": "Database injection",
+      "file": "app/data/allocations-dao.js",
+      "line": 73,
+      "snippet": "return {$where: `this.userId == ${parsedUserId} && this.stocks > ${parsedThreshold}`};",
+      "description": "Query built from string concatenation or $where; risk of SQL/NoSQL injection.",
+      "remediation": "Use parameterized queries / query builders and never pass user input into $where.",
+      "status": "unconfirmed lead"
+    },
+    {
+      "ruleId": "RG-SEC-005",
+      "severity": "MEDIUM",
+      "category": "Database injection",
+      "file": "app/data/allocations-dao.js",
+      "line": 78,
+      "snippet": "$where: `this.userId == ${parsedUserId} && this.stocks > '${threshold}'`",
+      "description": "Query built from string concatenation or $where; risk of SQL/NoSQL injection.",
+      "remediation": "Use parameterized queries / query builders and never pass user input into $where.",
+      "status": "unconfirmed lead"
+    }
+  ]
+}
