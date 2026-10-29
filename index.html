@@ -1,66 +1,389 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>RepoGuard AI — Code security &amp; CI review for small teams</title>
-  <style>
-    body { font-family: system-ui, -apple-system, sans-serif; max-width: 960px; margin: 32px auto; padding: 0 20px; color: #111827; line-height: 1.55; }
-    .card { border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; margin-bottom: 20px; background: #f9fafb; }
-    .badge { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; background: #e0e7ff; color: #3730a3; }
-    table { width: 100%; border-collapse: collapse; margin-top: 12px; }
-    th, td { border-bottom: 1px solid #e5e7eb; text-align: left; padding: 8px 6px; font-size: 13px; vertical-align: top; }
-    code { background: #f3f4f6; padding: 1px 5px; border-radius: 4px; font-family: monospace; word-break: break-all; }
-    .btn { display: inline-block; padding: 10px 16px; border-radius: 8px; background: #111827; color: #fff; text-decoration: none; font-weight: 600; margin: 4px 8px 4px 0; }
-    .btn.alt { background: #fff; color: #111827; border: 1px solid #111827; }
-    .muted { color: #6b7280; font-size: 13px; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RepoGuard AI — Security &amp; CI review for small teams, $79</title>
+<meta name="description" content="Lightweight AI-assisted security and CI review of your GitHub repo. Findings manually verified, written report with fixes in 3 business days. $79 per repo.">
+<meta property="og:title" content="RepoGuard AI — Security review for small teams">
+<meta property="og:description" content="AI-assisted, manually verified security &amp; CI review of your GitHub repo. $79, report in 3 business days, full refund if we can't deliver.">
+<meta name="theme-color" content="#0b0f17">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2l8 4v6c0 5-3.5 9-8 10-4.5-1-8-5-8-10V6z' fill='%2334d399'/%3E%3C/svg%3E">
+<style>
+:root{--bg:#0b0f17;--bg2:#111827;--card:#131b2a;--line:#1f2a3d;--txt:#e6edf6;--mut:#94a3b8;--acc:#34d399;--acc2:#22d3ee;--hi:#f87171;--med:#fbbf24;--r:16px}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--txt);font:16px/1.6 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--acc2)}
+code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace}
+code{font-size:.88em;background:#0e1522;border:1px solid var(--line);padding:1px 6px;border-radius:6px;word-break:break-word}
+.wrap{max-width:1120px;margin:0 auto;padding:0 22px}
+.skip{position:absolute;left:-999px;top:8px;background:var(--acc);color:#04130c;padding:8px 12px;border-radius:8px;z-index:9}
+.skip:focus{left:8px}
+:focus-visible{outline:3px solid var(--acc2);outline-offset:3px;border-radius:6px}
+/* nav */
+header.nav{position:sticky;top:0;z-index:5;background:rgba(11,15,23,.82);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;gap:16px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.01em;color:var(--txt);text-decoration:none;font-size:18px}
+.logo svg{color:var(--acc)}
+.nav ul{display:flex;gap:24px;list-style:none;margin:0;padding:0}
+.nav ul a{color:var(--mut);text-decoration:none;font-size:15px}
+.nav ul a:hover{color:var(--txt)}
+@media (max-width:820px){.nav ul{display:none}}
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 22px;border-radius:12px;font-weight:700;text-decoration:none;font-size:16px;transition:transform .15s,box-shadow .15s,background .15s;border:1px solid transparent}
+.btn-p{background:linear-gradient(135deg,var(--acc),#10b981);color:#03140d;box-shadow:0 8px 30px -8px rgba(52,211,153,.55)}
+.btn-p:hover{transform:translateY(-2px);box-shadow:0 12px 36px -8px rgba(52,211,153,.7)}
+.btn-s{background:transparent;color:var(--txt);border-color:#334155}
+.btn-s:hover{border-color:var(--acc2);color:#fff}
+.btn-sm{padding:9px 14px;font-size:14px;border-radius:10px;white-space:nowrap}
+@media (max-width:420px){.btn-sm{padding:8px 11px;font-size:13px}.logo{font-size:16px}}
+/* hero */
+.hero{position:relative;overflow:hidden;padding:88px 0 72px}
+.hero:before{content:"";position:absolute;inset:-40% -10% auto;height:720px;background:radial-gradient(closest-side,rgba(34,211,238,.18),transparent),radial-gradient(closest-side at 70% 40%,rgba(52,211,153,.16),transparent);pointer-events:none}
+.hero .wrap{position:relative;display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
+@media (max-width:920px){.hero .wrap{grid-template-columns:1fr}.hero{padding:56px 0 48px}}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:#0f1726;color:var(--mut);font-size:13px;font-weight:600}
+.pill i{width:8px;height:8px;border-radius:50%;background:var(--acc);box-shadow:0 0 0 4px rgba(52,211,153,.18)}
+h1{font-size:clamp(36px,5.4vw,60px);line-height:1.05;letter-spacing:-.03em;margin:18px 0 18px;font-weight:850}
+.grad{background:linear-gradient(90deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{font-size:clamp(17px,2vw,20px);color:#c3cede;max-width:600px;margin:0 0 28px}
+.ctas{display:flex;flex-wrap:wrap;gap:12px}
+.ticks{display:flex;flex-wrap:wrap;gap:8px 22px;list-style:none;padding:0;margin:26px 0 0;color:var(--mut);font-size:14px}
+.ticks li:before{content:"✓";color:var(--acc);font-weight:800;margin-right:7px}
+/* code card */
+.term{background:#0a101b;border:1px solid var(--line);border-radius:var(--r);box-shadow:0 30px 80px -30px rgba(0,0,0,.8),0 0 0 1px rgba(255,255,255,.02) inset;overflow:hidden}
+.term-h{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--line);background:#0d1420;font-size:13px;color:var(--mut)}
+.dots{display:flex;gap:6px;margin-right:6px}.dots b{width:11px;height:11px;border-radius:50%;background:#334155}
+.dots b:nth-child(1){background:#f87171}.dots b:nth-child(2){background:#fbbf24}.dots b:nth-child(3){background:#34d399}
+.term pre{margin:0;padding:18px 0;font-size:13.5px;line-height:1.75;overflow-x:auto}
+.ln{display:block;padding:0 18px;white-space:pre}
+.ln .n{display:inline-block;width:28px;color:#475569;user-select:none}
+.ln.bad{background:rgba(248,113,113,.1);border-left:3px solid var(--hi);padding-left:15px}
+.k{color:#c084fc}.s{color:#86efac}.f{color:#67e8f9}.c{color:#64748b}
+.term-f{padding:14px 18px;border-top:1px solid var(--line);display:grid;gap:8px;font-size:14px}
+.term-f p{margin:0;color:#cbd5e1}
+.sev{display:inline-block;font:700 11px/1 ui-monospace,monospace;letter-spacing:.06em;padding:5px 8px;border-radius:6px}
+.sev-high{background:rgba(248,113,113,.15);color:#fca5a5;border:1px solid rgba(248,113,113,.35)}
+.sev-medium{background:rgba(251,191,36,.13);color:#fcd34d;border:1px solid rgba(251,191,36,.35)}
+.sev-low{background:rgba(148,163,184,.15);color:#cbd5e1}
+.fix{color:var(--acc)}
+/* sections */
+section{padding:84px 0;border-top:1px solid var(--line)}
+@media (max-width:700px){section{padding:60px 0}}
+.eyebrow{color:var(--acc);font-weight:700;font-size:13px;letter-spacing:.12em;text-transform:uppercase;margin:0 0 10px}
+h2{font-size:clamp(28px,3.6vw,42px);line-height:1.12;letter-spacing:-.02em;margin:0 0 14px;font-weight:800}
+.sub{color:var(--mut);font-size:18px;max-width:680px;margin:0 0 40px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media (max-width:900px){.grid3{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:26px}
+.card h3{margin:0 0 8px;font-size:19px}
+.card p{margin:0;color:var(--mut)}
+.pain .card .big{font-size:30px;font-weight:800;margin-bottom:6px;color:var(--txt)}
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;list-style:none;padding:0;margin:0;counter-reset:s}
+@media (max-width:980px){.steps{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:600px){.steps{grid-template-columns:1fr}}
+.steps li{counter-increment:s;position:relative}
+.steps li:before{content:counter(s);display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,rgba(52,211,153,.2),rgba(34,211,238,.2));border:1px solid rgba(52,211,153,.4);color:var(--acc);font-weight:800;margin-bottom:16px}
+.steps p{font-size:15px}
+.addr{display:block;margin-top:10px;font-size:12px}
+/* checks */
+.checks{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;list-style:none;padding:0;margin:0}
+@media (max-width:900px){.checks{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){.checks{grid-template-columns:1fr}}
+.check{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;transition:border-color .2s}
+.check:hover{border-color:#2f4b5f}
+.check .ico{display:grid;place-items:center;width:42px;height:42px;border-radius:11px;background:rgba(34,211,238,.1);color:var(--acc2);margin-bottom:12px}
+.check h3{font-size:16.5px;margin:0 0 4px}
+.check p{margin:0;color:var(--mut);font-size:14.5px}
+.langs{margin-top:22px;color:var(--mut);font-size:14.5px}
+/* sample */
+.sample{display:grid;grid-template-columns:.9fr 1.1fr;gap:40px;align-items:start}
+@media (max-width:920px){.sample{grid-template-columns:1fr}}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:24px 0}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;text-align:center}
+.stat b{display:block;font-size:28px;line-height:1.1}
+.stat>span{color:var(--mut);font-size:13px}
+.note{font-size:14px;color:var(--mut);border-left:3px solid var(--med);padding:4px 0 4px 14px;margin:0 0 20px}
+details{margin-top:28px;background:var(--card);border:1px solid var(--line);border-radius:var(--r)}
+summary{cursor:pointer;padding:18px 22px;font-weight:700}
+.tbl{overflow-x:auto;padding:0 22px 22px}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:760px}
+th,td{text-align:left;vertical-align:top;padding:10px 8px;border-bottom:1px solid var(--line)}
+th{color:var(--mut);font-weight:600}
+/* pricing */
+.plans{display:grid;grid-template-columns:1fr 1fr;gap:22px;max-width:900px;margin:0 auto}
+@media (max-width:760px){.plans{grid-template-columns:1fr}}
+.plan{position:relative;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:32px;display:flex;flex-direction:column}
+.plan.feat{border:1px solid transparent;background:linear-gradient(var(--card),var(--card)) padding-box,linear-gradient(135deg,var(--acc),var(--acc2)) border-box;box-shadow:0 30px 80px -40px rgba(52,211,153,.5)}
+.tag{position:absolute;top:-13px;left:32px;background:var(--acc);color:#03140d;font-size:12px;font-weight:800;padding:5px 11px;border-radius:999px;letter-spacing:.04em}
+.plan h3{margin:0;font-size:20px}
+.price{font-size:52px;font-weight:850;letter-spacing:-.03em;margin:10px 0 2px}
+.price small{font-size:16px;color:var(--mut);font-weight:600}
+.plan .desc{color:var(--mut);margin:0 0 20px}
+.plan ul{list-style:none;padding:0;margin:0 0 26px;display:grid;gap:10px;flex:1}
+.plan li{padding-left:28px;position:relative}
+.plan li:before{content:"✓";position:absolute;left:0;top:0;width:20px;height:20px;border-radius:50%;background:rgba(52,211,153,.15);color:var(--acc);font-size:12px;font-weight:900;display:grid;place-items:center;margin-top:3px}
+.plan .btn{width:100%}
+.paylink{margin-top:12px;text-align:center;font-size:13.5px}
+.paylink a{color:var(--mut)}
+/* guarantee */
+.guar{display:flex;gap:28px;align-items:center;max-width:900px;margin:40px auto 0;padding:28px;border-radius:20px;border:1px dashed rgba(52,211,153,.45);background:rgba(52,211,153,.05)}
+@media (max-width:640px){.guar{flex-direction:column;text-align:center}}
+.seal{flex:none;width:104px;height:104px;border-radius:50%;display:grid;place-items:center;text-align:center;background:radial-gradient(circle,#0f2a20,#0b1a15);border:2px solid var(--acc);color:var(--acc);font-weight:900;font-size:13px;line-height:1.15;letter-spacing:.05em;box-shadow:0 0 0 6px rgba(52,211,153,.1)}
+.seal b{display:block;font-size:24px}
+.guar h3{margin:0 0 6px;font-size:21px}
+.guar p{margin:0;color:#c3cede}
+/* faq */
+.faq{max-width:820px;margin:0 auto}
+.faq details{margin:0 0 12px}
+.faq summary{list-style:none;display:flex;justify-content:space-between;gap:16px;font-size:17px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:after{content:"+";color:var(--acc);font-size:22px;line-height:1;transition:transform .2s}
+.faq details[open] summary:after{transform:rotate(45deg)}
+.faq .a{padding:0 22px 20px;color:#c3cede}
+.faq .a p{margin:0 0 10px}
+/* final */
+.final{text-align:center;background:radial-gradient(ellipse at center top,rgba(52,211,153,.14),transparent 60%)}
+.final .sub{margin:0 auto 30px}
+.final .ctas{justify-content:center}
+footer{border-top:1px solid var(--line);padding:36px 0 48px;color:var(--mut);font-size:14px}
+footer .wrap{display:grid;gap:14px}
+footer .row{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
+footer a{color:var(--mut)}
+.disc{font-size:13px;color:#7c8aa0;max-width:860px}
+.center{text-align:center}.center .sub{margin-left:auto;margin-right:auto}
+</style>
 </head>
 <body>
-  <span class="badge">Automated scan + reviewed report</span>
-  <h1>RepoGuard AI — security &amp; CI review for your repository</h1>
-  <p>We run an automated scan for common risk patterns (code/command injection, hard-coded secrets, weak crypto, SQL/NoSQL injection, disabled TLS or cookie flags, privileged containers, unpinned CI actions) across JavaScript/TypeScript, Python, Go, Rust, Solidity, shell, YAML and Docker files. Every lead is then reviewed (AI-assisted review), false positives are removed, and you get a written report with a concrete fix suggestion for each confirmed issue.</p>
-  <p class="muted">This is a lightweight review, not a formal audit or certification, and it does not guarantee that your code is free of vulnerabilities.</p>
-
-  <div class="card">
-    <h3>Sample: real scanner output on a public repo</h3>
-    <p>Target: <a href="https://github.com/OWASP/NodeGoat">OWASP/NodeGoat</a> (an intentionally vulnerable training app), commit <code>c5cb68a</code>. Files scanned: <strong>49</strong> · Leads: <strong>9</strong> (High 7, Medium 2, Low 0).</p>
-    <table>
-      <thead><tr><th>Rule</th><th>Severity</th><th>Location</th><th>Matched code</th><th>Suggested fix</th></tr></thead>
-      <tbody>
-        <tr><td><code>RG-SEC-001</code></td><td><strong>HIGH</strong></td><td><code>app/routes/contributions.js:32</code></td><td><code>const preTax = eval(req.body.preTax);</code></td><td>Remove eval/new Function; parse input explicitly (e.g. JSON.parse, parseInt) and validate it.</td></tr>
-        <tr><td><code>RG-SEC-001</code></td><td><strong>HIGH</strong></td><td><code>app/routes/contributions.js:33</code></td><td><code>const afterTax = eval(req.body.afterTax);</code></td><td>Remove eval/new Function; parse input explicitly (e.g. JSON.parse, parseInt) and validate it.</td></tr>
-        <tr><td><code>RG-SEC-001</code></td><td><strong>HIGH</strong></td><td><code>app/routes/contributions.js:34</code></td><td><code>const roth = eval(req.body.roth);</code></td><td>Remove eval/new Function; parse input explicitly (e.g. JSON.parse, parseInt) and validate it.</td></tr>
-        <tr><td><code>RG-SEC-003</code></td><td><strong>HIGH</strong></td><td><code>config/env/all.js:8</code></td><td><code>cookieSecret: &quot;session_cookie_secret_key_here&quot;,</code></td><td>Move secrets to environment variables or a secret manager and rotate the exposed value.</td></tr>
-        <tr><td><code>RG-SEC-003</code></td><td><strong>HIGH</strong></td><td><code>config/env/development.js:6</code></td><td><code>zapApiKey: &quot;v9dn0balpqas1pcc281tn5ood1&quot;,</code></td><td>Move secrets to environment variables or a secret manager and rotate the exposed value.</td></tr>
-        <tr><td><code>RG-SEC-003</code></td><td><strong>HIGH</strong></td><td><code>config/env/test.js:6</code></td><td><code>zapApiKey: &quot;v9dn0balpqas1pcc281tn5ood1&quot;,</code></td><td>Move secrets to environment variables or a secret manager and rotate the exposed value.</td></tr>
-        <tr><td><code>RG-SEC-003</code></td><td><strong>HIGH</strong></td><td><code>test/security/profile-test.js:37</code></td><td><code>var sutUserPassword = &quot;User1_123&quot;;</code></td><td>Move secrets to environment variables or a secret manager and rotate the exposed value.</td></tr>
-        <tr><td><code>RG-SEC-005</code></td><td><strong>MEDIUM</strong></td><td><code>app/data/allocations-dao.js:73</code></td><td><code>return {$where: `this.userId == ${parsedUserId} &amp;&amp; this.stocks &gt; ${parsedThreshold}`};</code></td><td>Use parameterized queries / query builders and never pass user input into $where.</td></tr>
-        <tr><td><code>RG-SEC-005</code></td><td><strong>MEDIUM</strong></td><td><code>app/data/allocations-dao.js:78</code></td><td><code>$where: `this.userId == ${parsedUserId} &amp;&amp; this.stocks &gt; &#x27;${threshold}&#x27;`</code></td><td>Use parameterized queries / query builders and never pass user input into $where.</td></tr>
-      </tbody>
-    </table>
-    <p class="muted">Raw automated output, before manual review. In a paid report each lead is confirmed or dismissed (for example, the test-fixture password above would be marked low risk).</p>
+<a class="skip" href="#main">Skip to content</a>
+<header class="nav">
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="RepoGuard AI home">
+      <svg aria-hidden="true" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 9-8 10-4.5-1-8-5-8-10V6z"/><path d="M9 12l2 2 4-4" stroke-linecap="round"/></svg>
+      RepoGuard&nbsp;AI
+    </a>
+    <nav aria-label="Main"><ul>
+      <li><a href="#how">How it works</a></li>
+      <li><a href="#checks">What we check</a></li>
+      <li><a href="#sample">Sample</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul></nav>
+    <a class="btn btn-p btn-sm" href="https://github.com/RPMFAN/repoguard-ai/issues/new?title=Audit+request%3A+%3Crepo+URL%3E&amp;body=Repo+URL%3A%0APlan+(%2479+audit+or+%2439%2Fmo+monitoring)%3A%0AContact+email%3A%0A">Get reviewed — $79</a>
   </div>
+</header>
 
-  <div class="card">
-    <h3>Pricing</h3>
-    <ul>
-      <li><strong>Single repository review:</strong> $79 one-time. Written report with confirmed issues and fix suggestions, delivered within 3 business days. A pull request with fixes is available on request for public repos.</li>
-      <li><strong>Monthly monitoring:</strong> $39 / month. Weekly re-scan of your default branch with a short summary of new leads. Cancel any time.</li>
-    </ul>
+<main id="main">
+<div class="hero" id="top">
+  <div class="wrap">
+    <div>
+      <span class="pill"><i></i>Security &amp; CI review for small teams</span>
+      <h1>Find the security holes in your repo <span class="grad">before someone else does.</span></h1>
+      <p class="lead">RepoGuard AI scans your GitHub repository for injection bugs, leaked secrets and risky CI settings. Then every lead is checked by hand, and you get a clear written report with a fix for each confirmed issue. Flat $79, in 3 business days.</p>
+      <div class="ctas">
+        <a class="btn btn-p" href="https://github.com/RPMFAN/repoguard-ai/issues/new?title=Audit+request%3A+%3Crepo+URL%3E&amp;body=Repo+URL%3A%0APlan+(%2479+audit+or+%2439%2Fmo+monitoring)%3A%0AContact+email%3A%0A">Get your repo reviewed — $79 <span aria-hidden="true">→</span></a>
+        <a class="btn btn-s" href="#sample">See a sample report</a>
+      </div>
+      <ul class="ticks">
+        <li>Findings manually verified</li>
+        <li>Scope confirmed before you pay</li>
+        <li>Full refund if we can't deliver</li>
+      </ul>
+    </div>
+    <figure class="term" aria-label="Example finding from a real scan of OWASP NodeGoat" style="margin:0">
+      <div class="term-h"><span class="dots" aria-hidden="true"><b></b><b></b><b></b></span>app/routes/contributions.js</div>
+<pre><code style="background:none;border:0;padding:0"><span class="ln bad"><span class="n">32</span><span class="k">const</span> preTax = <span class="f">eval</span>(req.body.preTax);</span><span class="ln bad"><span class="n">33</span><span class="k">const</span> afterTax = <span class="f">eval</span>(req.body.afterTax);</span><span class="ln bad"><span class="n">34</span><span class="k">const</span> roth = <span class="f">eval</span>(req.body.roth);</span></code></pre>
+      <div class="term-f">
+        <p><span class="sev sev-high">HIGH</span> &nbsp;<code>RG-SEC-001</code> Code injection — user input reaches <code>eval()</code>.</p>
+        <p><span class="fix">Fix →</span> Remove <code>eval</code>; parse input explicitly (e.g. <code>parseInt</code>) and validate it.</p>
+      </div>
+    </figure>
   </div>
+</div>
 
-  <div class="card">
-    <h3>How to order</h3>
-    <ol>
-      <li><strong>Open a request:</strong> <a class="btn" href="https://github.com/RPMFAN/repoguard-ai/issues/new?title=Audit+request%3A+%3Crepo+URL%3E&amp;body=Repo+URL%3A%0APlan+(%2479+audit+or+%2439%2Fmo+monitoring)%3A%0AContact+email%3A%0A">Open a GitHub issue in RPMFAN/repoguard-ai</a><br/>Include your repo URL (public, or tell us how to get read access), the plan, and a contact email.</li>
-      <li><strong>We confirm scope</strong> in the issue (repo size, languages) before you pay anything.</li>
-      <li><strong>Pay in USDC on Base</strong> (chain ID 8453) to <code>0x26AB46a0309C3ab8F2f59754B3066e77E8154A34</code>:<br/>
-        <a class="btn alt" href="ethereum:0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913@8453/transfer?address=0x26AB46a0309C3ab8F2f59754B3066e77E8154A34&amp;uint256=79000000">Pay $79 USDC (wallet link)</a>
-        <a class="btn alt" href="ethereum:0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913@8453/transfer?address=0x26AB46a0309C3ab8F2f59754B3066e77E8154A34&amp;uint256=39000000">Pay $39 USDC (wallet link)</a><br/>
-        <span class="muted">Links use the EIP-681 format and open in compatible wallets (e.g. MetaMask mobile). Or send manually: token USDC <code>0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913</code> on Base. Post the transaction hash in your issue. Send only USDC on the Base network.</span></li>
-      <li><strong>Delivery:</strong> the report is attached to your issue (or emailed privately for private repos) within 3 business days of payment. If we can't deliver, you get a full refund to the sending address.</li>
+<section class="pain" aria-labelledby="pain-h">
+  <div class="wrap">
+    <p class="eyebrow">The problem</p>
+    <h2 id="pain-h">You ship fast. Security review gets skipped.</h2>
+    <p class="sub">Small teams don't have a security engineer, and a professional audit typically costs thousands of dollars. So the easy-to-miss stuff slips into main.</p>
+    <div class="grid3">
+      <div class="card"><div class="big">Speed wins</div><p>Features and deadlines come first. Nobody has time to grep the codebase for <code>eval</code> or a committed API key.</p></div>
+      <div class="card"><div class="big">Audits cost $$$$</div><p>A formal audit is priced for funded companies, not for a two-person startup or a side project with real users.</p></div>
+      <div class="card"><div class="big">Scanners are noisy</div><p>Free tools dump hundreds of warnings. We filter the noise and tell you which issues are real and how to fix them.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="how" aria-labelledby="how-h">
+  <div class="wrap">
+    <p class="eyebrow">How it works</p>
+    <h2 id="how-h">Four steps. No sign-up, no sales call.</h2>
+    <p class="sub">Everything happens in a GitHub issue, so you always see where your order stands.</p>
+    <ol class="steps">
+      <li class="card"><h3>Open a request</h3><p>Open a <a href="https://github.com/RPMFAN/repoguard-ai/issues/new?title=Audit+request%3A+%3Crepo+URL%3E&amp;body=Repo+URL%3A%0APlan+(%2479+audit+or+%2439%2Fmo+monitoring)%3A%0AContact+email%3A%0A">prefilled GitHub issue</a> with your repo URL, the plan, and a contact email.</p></li>
+      <li class="card"><h3>We confirm scope</h3><p>We check repo size and languages and confirm in the issue — before you pay anything.</p></li>
+      <li class="card"><h3>Pay in USDC on Base</h3><p>Send USDC on Base (chain ID 8453) and post the transaction hash in your issue.<code class="addr">0x26AB46a0309C3ab8F2f59754B3066e77E8154A34</code></p></li>
+      <li class="card"><h3>Get your report</h3><p>Confirmed issues with fix suggestions, within 3 business days of payment. Private repos: delivered privately by email.</p></li>
     </ol>
   </div>
+</section>
+
+<section id="checks" aria-labelledby="checks-h">
+  <div class="wrap">
+    <p class="eyebrow">What we check</p>
+    <h2 id="checks-h">The mistakes that actually get teams breached</h2>
+    <p class="sub">Automated pattern scanning across your code, configs and CI, followed by a manual review of every lead.</p>
+    <ul class="checks">
+<li class="check"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6l-6 6 6 6M16 6l6 6-6 6"/></svg></span><h3>Code injection &amp; <code>eval</code></h3><p>Dynamic evaluation of input: <code>eval</code>, <code>new Function</code>, unsafe templates.</p></li>
+<li class="check"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9l3 3-3 3M13 15h4"/></svg></span><h3>Shell injection</h3><p>User data flowing into <code>exec</code>, <code>system</code> or <code>shell=True</code>.</p></li>
+<li class="check"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M17 6l3 3"/></svg></span><h3>Hard-coded secrets</h3><p>API keys, passwords and tokens committed to the repo.</p></li>
+<li class="check"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg></span><h3>Weak crypto</h3><p>MD5/SHA-1 for security, insecure randomness, outdated ciphers.</p></li>
+<li class="check"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg></span><h3>SQL / NoSQL injection</h3><p>String-built queries and user input in Mongo <code>$where</code>.</p></li>
+<li class="check"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><path d="M9 12l2 2 4-4"/></svg></span><h3>Disabled TLS &amp; insecure cookies</h3><p>Certificate checks turned off, cookies without <code>Secure</code>/<code>HttpOnly</code>.</p></li>
+<li class="check"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 7v10l9 4 9-4V7M12 11v10"/></svg></span><h3>Privileged containers</h3><p>Docker/Compose/K8s configs running as root or <code>privileged</code>.</p></li>
+<li class="check"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="12" r="2"/><path d="M6 8v8M8 6h4a4 4 0 014 4v0"/></svg></span><h3>Unpinned CI actions</h3><p>GitHub Actions referenced by mutable tag instead of commit SHA.</p></li>
+<li class="check"><span class="ico"><svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><h3>Network calls without timeouts</h3><p>HTTP requests that can hang workers forever.</p></li>
+    </ul>
+    <p class="langs">Languages &amp; files: JavaScript/TypeScript, Python, Go, Rust, Solidity, shell, YAML and Dockerfiles.</p>
+  </div>
+</section>
+
+<section id="sample" aria-labelledby="sample-h">
+  <div class="wrap">
+    <div class="sample">
+      <div>
+        <p class="eyebrow">Real demo, not a mock-up</p>
+        <h2 id="sample-h">We ran it on OWASP NodeGoat</h2>
+        <p class="sub" style="margin-bottom:0">NodeGoat is a public, <strong>intentionally vulnerable</strong> training app from OWASP — so it's a fair test of whether the scanner finds real bugs. Commit <code>c5cb68a</code>.</p>
+        <div class="stats">
+          <div class="stat"><b>49</b><span>files scanned</span></div>
+          <div class="stat"><b>9</b><span>leads found</span></div>
+          <div class="stat"><b><span style="color:#fca5a5">7</span>/<span style="color:#fcd34d">2</span></b><span>High / Medium</span></div>
+        </div>
+        <p class="note">Raw automated output, before manual review. In a paid report each lead is confirmed or dismissed — e.g. a test-fixture password would be marked low risk.</p>
+        <div class="ctas"><a class="btn btn-s" href="https://github.com/RPMFAN/repoguard-ai/blob/main/sample/audit-report.md">Read the full sample report</a></div>
+      </div>
+      <div style="display:grid;gap:16px">
+        <figure class="term" style="margin:0" aria-label="Finding: hard-coded cookie secret">
+          <div class="term-h"><span class="dots" aria-hidden="true"><b></b><b></b><b></b></span>config/env/all.js</div>
+<pre><code style="background:none;border:0;padding:0"><span class="ln bad"><span class="n">8</span>  cookieSecret: <span class="s">"session_cookie_secret_key_here"</span>,</span></code></pre>
+          <div class="term-f"><p><span class="sev sev-high">HIGH</span> &nbsp;<code>RG-SEC-003</code> Hard-coded secret in config.</p><p><span class="fix">Fix →</span> Move to an environment variable or secret manager and rotate the value.</p></div>
+        </figure>
+        <figure class="term" style="margin:0" aria-label="Finding: NoSQL $where injection">
+          <div class="term-h"><span class="dots" aria-hidden="true"><b></b><b></b><b></b></span>app/data/allocations-dao.js</div>
+<pre><code style="background:none;border:0;padding:0"><span class="ln bad"><span class="n">78</span>  <span class="f">$where</span>: <span class="s">`this.userId == ${parsedUserId} &amp;&amp; this.stocks &gt; '${threshold}'`</span></span></code></pre>
+          <div class="term-f"><p><span class="sev sev-medium">MEDIUM</span> &nbsp;<code>RG-SEC-005</code> NoSQL injection via <code>$where</code>.</p><p><span class="fix">Fix →</span> Use parameterized queries; never pass user input into <code>$where</code>.</p></div>
+        </figure>
+      </div>
+    </div>
+    <details>
+      <summary>Show all 9 raw leads from the NodeGoat scan</summary>
+      <div class="tbl"><table>
+        <thead><tr><th scope="col">Rule</th><th scope="col">Severity</th><th scope="col">Location</th><th scope="col">Matched code</th><th scope="col">Suggested fix</th></tr></thead>
+        <tbody>
+<tr><td><code>RG-SEC-001</code></td><td><span class="sev sev-high">HIGH</span></td><td><code>app/routes/contributions.js:32</code></td><td><code>const preTax = eval(req.body.preTax);</code></td><td>Remove eval/new Function; parse input explicitly (e.g. JSON.parse, parseInt) and validate it.</td></tr>
+<tr><td><code>RG-SEC-001</code></td><td><span class="sev sev-high">HIGH</span></td><td><code>app/routes/contributions.js:33</code></td><td><code>const afterTax = eval(req.body.afterTax);</code></td><td>Remove eval/new Function; parse input explicitly (e.g. JSON.parse, parseInt) and validate it.</td></tr>
+<tr><td><code>RG-SEC-001</code></td><td><span class="sev sev-high">HIGH</span></td><td><code>app/routes/contributions.js:34</code></td><td><code>const roth = eval(req.body.roth);</code></td><td>Remove eval/new Function; parse input explicitly (e.g. JSON.parse, parseInt) and validate it.</td></tr>
+<tr><td><code>RG-SEC-003</code></td><td><span class="sev sev-high">HIGH</span></td><td><code>config/env/all.js:8</code></td><td><code>cookieSecret: &quot;session_cookie_secret_key_here&quot;,</code></td><td>Move secrets to environment variables or a secret manager and rotate the exposed value.</td></tr>
+<tr><td><code>RG-SEC-003</code></td><td><span class="sev sev-high">HIGH</span></td><td><code>config/env/development.js:6</code></td><td><code>zapApiKey: &quot;v9dn0balpqas1pcc281tn5ood1&quot;,</code></td><td>Move secrets to environment variables or a secret manager and rotate the exposed value.</td></tr>
+<tr><td><code>RG-SEC-003</code></td><td><span class="sev sev-high">HIGH</span></td><td><code>config/env/test.js:6</code></td><td><code>zapApiKey: &quot;v9dn0balpqas1pcc281tn5ood1&quot;,</code></td><td>Move secrets to environment variables or a secret manager and rotate the exposed value.</td></tr>
+<tr><td><code>RG-SEC-003</code></td><td><span class="sev sev-high">HIGH</span></td><td><code>test/security/profile-test.js:37</code></td><td><code>var sutUserPassword = &quot;User1_123&quot;;</code></td><td>Move secrets to environment variables or a secret manager and rotate the exposed value.</td></tr>
+<tr><td><code>RG-SEC-005</code></td><td><span class="sev sev-medium">MEDIUM</span></td><td><code>app/data/allocations-dao.js:73</code></td><td><code>return {$where: `this.userId == ${parsedUserId} &amp;&amp; this.stocks &gt; ${parsedThreshold}`};</code></td><td>Use parameterized queries / query builders and never pass user input into $where.</td></tr>
+<tr><td><code>RG-SEC-005</code></td><td><span class="sev sev-medium">MEDIUM</span></td><td><code>app/data/allocations-dao.js:78</code></td><td><code>$where: `this.userId == ${parsedUserId} &amp;&amp; this.stocks &gt; &#x27;${threshold}&#x27;`</code></td><td>Use parameterized queries / query builders and never pass user input into $where.</td></tr>
+        </tbody>
+      </table></div>
+    </details>
+  </div>
+</section>
+
+<section id="pricing" aria-labelledby="pricing-h">
+  <div class="wrap">
+    <div class="center">
+      <p class="eyebrow">Pricing</p>
+      <h2 id="pricing-h">Simple, flat pricing</h2>
+      <p class="sub">No subscriptions you forget about, no per-seat fees. Scope is confirmed before you pay.</p>
+    </div>
+    <div class="plans">
+      <div class="plan feat">
+        <span class="tag">RECOMMENDED</span>
+        <h3>Single repo review</h3>
+        <div class="price">$79 <small>one-time</small></div>
+        <p class="desc">A one-off security &amp; CI check of one repository.</p>
+        <ul>
+          <li>Automated scan + manual verification of every lead</li>
+          <li>Written report: confirmed issues &amp; fix suggestions</li>
+          <li>Delivered within 3 business days of payment</li>
+          <li>Fix pull request on request (public repos)</li>
+          <li>Full refund if we can't deliver</li>
+        </ul>
+        <a class="btn btn-p" href="https://github.com/RPMFAN/repoguard-ai/issues/new?title=Audit+request%3A+%3Crepo+URL%3E&amp;body=Repo+URL%3A%0APlan+(%2479+audit+or+%2439%2Fmo+monitoring)%3A%0AContact+email%3A%0A">Get your repo reviewed — $79</a>
+        <p class="paylink">Scope already confirmed? <a href="ethereum:0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913@8453/transfer?address=0x26AB46a0309C3ab8F2f59754B3066e77E8154A34&amp;uint256=79000000">Pay $79 USDC (wallet link)</a></p>
+      </div>
+      <div class="plan">
+        <h3>Monthly monitoring</h3>
+        <div class="price">$39 <small>/ month</small></div>
+        <p class="desc">Keep catching new issues as your code changes.</p>
+        <ul>
+          <li>Weekly re-scan of your default branch</li>
+          <li>Short summary of new leads each week</li>
+          <li>Cancel any time</li>
+        </ul>
+        <a class="btn btn-s" href="https://github.com/RPMFAN/repoguard-ai/issues/new?title=Audit+request%3A+%3Crepo+URL%3E&amp;body=Repo+URL%3A%0APlan+(%2479+audit+or+%2439%2Fmo+monitoring)%3A%0AContact+email%3A%0A">Start monitoring</a>
+        <p class="paylink">Scope already confirmed? <a href="ethereum:0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913@8453/transfer?address=0x26AB46a0309C3ab8F2f59754B3066e77E8154A34&amp;uint256=39000000">Pay $39 USDC (wallet link)</a></p>
+      </div>
+    </div>
+    <div class="guar" role="note" aria-label="Guarantee">
+      <div class="seal" aria-hidden="true"><div><b>100%</b>REFUND<br>GUARANTEE</div></div>
+      <div>
+        <h3>Deliver or your money back</h3>
+        <p>If we can't deliver your report, you get a full refund to the address you paid from. And you never pay before we've confirmed the scope.</p>
+      </div>
+    </div>
+    <p class="center disc" style="margin:22px auto 0">Payment links use the EIP-681 format and open in compatible wallets (e.g. MetaMask mobile). Or send manually: USDC token <code>0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913</code> on Base to <code>0x26AB46a0309C3ab8F2f59754B3066e77E8154A34</code>. Send only USDC on the Base network, then post the transaction hash in your issue.</p>
+  </div>
+</section>
+
+<section id="faq" aria-labelledby="faq-h">
+  <div class="wrap">
+    <div class="center">
+      <p class="eyebrow">FAQ</p>
+      <h2 id="faq-h">Honest answers</h2>
+      <p class="sub">What you get, what you don't, and how payment works.</p>
+    </div>
+    <div class="faq">
+      <details><summary>Is this a formal audit?</summary><div class="a"><p>No. RepoGuard AI is a lightweight, AI-assisted review with manual verification of findings. It is not a formal security audit or certification, and it can't guarantee your code is free of vulnerabilities. It's a fast, affordable way to catch common, high-impact mistakes.</p></div></details>
+      <details><summary>What does "manually verified" mean?</summary><div class="a"><p>The scanner produces leads. Each lead is reviewed: false positives are dismissed, real issues are confirmed and explained, and each one gets a concrete fix suggestion. You get the confirmed list, not a raw dump.</p></div></details>
+      <details><summary>Can you review private repos?</summary><div class="a"><p>Yes. In your request, tell us how to get read access. For private repos the report is sent privately by email instead of being posted in the public issue. Fix pull requests are offered for public repos.</p></div></details>
+      <details><summary>Why pay in USDC?</summary><div class="a"><p>USDC is a dollar-pegged stablecoin, so $79 is exactly 79 USDC — no volatility. Payment on Base is fast with low fees, works across borders, and the transaction hash gives both sides a clear receipt. You only pay after we've confirmed scope.</p></div></details>
+      <details><summary>How fast will I get the report?</summary><div class="a"><p>Within 3 business days of payment. If we can't deliver, you get a full refund to the sending address.</p></div></details>
+      <details><summary>Which languages do you support?</summary><div class="a"><p>JavaScript/TypeScript, Python, Go, Rust, Solidity, shell scripts, YAML (including GitHub Actions) and Dockerfiles. If your stack is different, open a request and we'll tell you honestly whether we can help before you pay.</p></div></details>
+    </div>
+  </div>
+</section>
+
+<section class="final" aria-labelledby="final-h">
+  <div class="wrap">
+    <h2 id="final-h">Know what's in your repo — for $79.</h2>
+    <p class="sub">Open a request in a minute. We confirm scope first, you pay only when you're happy with it.</p>
+    <div class="ctas">
+      <a class="btn btn-p" href="https://github.com/RPMFAN/repoguard-ai/issues/new?title=Audit+request%3A+%3Crepo+URL%3E&amp;body=Repo+URL%3A%0APlan+(%2479+audit+or+%2439%2Fmo+monitoring)%3A%0AContact+email%3A%0A">Get your repo reviewed — $79 <span aria-hidden="true">→</span></a>
+      <a class="btn btn-s" href="https://github.com/RPMFAN/repoguard-ai/blob/main/sample/audit-report.md">See a sample report</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="row">
+      <strong style="color:var(--txt)">RepoGuard AI</strong>
+      <span><a href="https://github.com/RPMFAN/repoguard-ai">GitHub</a> · <a href="https://github.com/RPMFAN/repoguard-ai/issues/new?title=Audit+request%3A+%3Crepo+URL%3E&amp;body=Repo+URL%3A%0APlan+(%2479+audit+or+%2439%2Fmo+monitoring)%3A%0AContact+email%3A%0A">Order</a> · <a href="https://github.com/RPMFAN/repoguard-ai/blob/main/sample/audit-report.md">Sample report</a></span>
+    </div>
+    <p class="disc">RepoGuard AI provides a lightweight, AI-assisted security and CI review with manually verified findings. It is not a formal security audit or certification and does not guarantee that your code is free of vulnerabilities. The NodeGoat example shows raw automated output on an intentionally vulnerable OWASP training project. OWASP and NodeGoat are names of their respective owners; no affiliation is implied.</p>
+  </div>
+</footer>
 </body>
 </html>
