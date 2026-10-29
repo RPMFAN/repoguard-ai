@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>RepoGuard AI — Code security &amp; CI review for small teams</title>
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; max-width: 960px; margin: 32px auto; padding: 0 20px; color: #111827; line-height: 1.55; }
+    .card { border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; margin-bottom: 20px; background: #f9fafb; }
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; background: #e0e7ff; color: #3730a3; }
+    table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+    th, td { border-bottom: 1px solid #e5e7eb; text-align: left; padding: 8px 6px; font-size: 13px; vertical-align: top; }
+    code { background: #f3f4f6; padding: 1px 5px; border-radius: 4px; font-family: monospace; word-break: break-all; }
+    .btn { display: inline-block; padding: 10px 16px; border-radius: 8px; background: #111827; color: #fff; text-decoration: none; font-weight: 600; margin: 4px 8px 4px 0; }
+    .btn.alt { background: #fff; color: #111827; border: 1px solid #111827; }
+    .muted { color: #6b7280; font-size: 13px; }
+  </style>
+</head>
+<body>
+  <span class="badge">Automated scan + reviewed report</span>
+  <h1>RepoGuard AI — security &amp; CI review for your repository</h1>
+  <p>We run an automated scan for common risk patterns (code/command injection, hard-coded secrets, weak crypto, SQL/NoSQL injection, disabled TLS or cookie flags, privileged containers, unpinned CI actions) across JavaScript/TypeScript, Python, Go, Rust, Solidity, shell, YAML and Docker files. Every lead is then reviewed (AI-assisted review), false positives are removed, and you get a written report with a concrete fix suggestion for each confirmed issue.</p>
+  <p class="muted">This is a lightweight review, not a formal audit or certification, and it does not guarantee that your code is free of vulnerabilities.</p>
+
+  <div class="card">
+    <h3>Sample: real scanner output on a public repo</h3>
+    <p>Target: <a href="https://github.com/OWASP/NodeGoat">OWASP/NodeGoat</a> (an intentionally vulnerable training app), commit <code>c5cb68a</code>. Files scanned: <strong>49</strong> · Leads: <strong>9</strong> (High 7, Medium 2, Low 0).</p>
+    <table>
+      <thead><tr><th>Rule</th><th>Severity</th><th>Location</th><th>Matched code</th><th>Suggested fix</th></tr></thead>
+      <tbody>
+        <tr><td><code>RG-SEC-001</code></td><td><strong>HIGH</strong></td><td><code>app/routes/contributions.js:32</code></td><td><code>const preTax = eval(req.body.preTax);</code></td><td>Remove eval/new Function; parse input explicitly (e.g. JSON.parse, parseInt) and validate it.</td></tr>
+        <tr><td><code>RG-SEC-001</code></td><td><strong>HIGH</strong></td><td><code>app/routes/contributions.js:33</code></td><td><code>const afterTax = eval(req.body.afterTax);</code></td><td>Remove eval/new Function; parse input explicitly (e.g. JSON.parse, parseInt) and validate it.</td></tr>
+        <tr><td><code>RG-SEC-001</code></td><td><strong>HIGH</strong></td><td><code>app/routes/contributions.js:34</code></td><td><code>const roth = eval(req.body.roth);</code></td><td>Remove eval/new Function; parse input explicitly (e.g. JSON.parse, parseInt) and validate it.</td></tr>
+        <tr><td><code>RG-SEC-003</code></td><td><strong>HIGH</strong></td><td><code>config/env/all.js:8</code></td><td><code>cookieSecret: &quot;session_cookie_secret_key_here&quot;,</code></td><td>Move secrets to environment variables or a secret manager and rotate the exposed value.</td></tr>
+        <tr><td><code>RG-SEC-003</code></td><td><strong>HIGH</strong></td><td><code>config/env/development.js:6</code></td><td><code>zapApiKey: &quot;v9dn0balpqas1pcc281tn5ood1&quot;,</code></td><td>Move secrets to environment variables or a secret manager and rotate the exposed value.</td></tr>
+        <tr><td><code>RG-SEC-003</code></td><td><strong>HIGH</strong></td><td><code>config/env/test.js:6</code></td><td><code>zapApiKey: &quot;v9dn0balpqas1pcc281tn5ood1&quot;,</code></td><td>Move secrets to environment variables or a secret manager and rotate the exposed value.</td></tr>
+        <tr><td><code>RG-SEC-003</code></td><td><strong>HIGH</strong></td><td><code>test/security/profile-test.js:37</code></td><td><code>var sutUserPassword = &quot;User1_123&quot;;</code></td><td>Move secrets to environment variables or a secret manager and rotate the exposed value.</td></tr>
+        <tr><td><code>RG-SEC-005</code></td><td><strong>MEDIUM</strong></td><td><code>app/data/allocations-dao.js:73</code></td><td><code>return {$where: `this.userId == ${parsedUserId} &amp;&amp; this.stocks &gt; ${parsedThreshold}`};</code></td><td>Use parameterized queries / query builders and never pass user input into $where.</td></tr>
+        <tr><td><code>RG-SEC-005</code></td><td><strong>MEDIUM</strong></td><td><code>app/data/allocations-dao.js:78</code></td><td><code>$where: `this.userId == ${parsedUserId} &amp;&amp; this.stocks &gt; &#x27;${threshold}&#x27;`</code></td><td>Use parameterized queries / query builders and never pass user input into $where.</td></tr>
+      </tbody>
+    </table>
+    <p class="muted">Raw automated output, before manual review. In a paid report each lead is confirmed or dismissed (for example, the test-fixture password above would be marked low risk).</p>
+  </div>
+
+  <div class="card">
+    <h3>Pricing</h3>
+    <ul>
+      <li><strong>Single repository review:</strong> $79 one-time. Written report with confirmed issues and fix suggestions. A pull request with fixes is available on request for public repos.</li>
+      <li><strong>Monthly monitoring:</strong> $39 / month. Weekly re-scan of your default branch with a short summary of new leads. Cancel any time.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>How to order</h3>
+    <ol>
+      <li><strong>Open a request:</strong> <a class="btn" href="https://github.com/RPMFAN/repoguard-ai/issues/new?title=Audit+request%3A+%3Crepo+URL%3E&amp;body=Repo+URL%3A%0APlan+(%2479+audit+or+%2439%2Fmo+monitoring)%3A%0AContact+email%3A%0A">Open a GitHub issue in RPMFAN/repoguard-ai</a><br/>Include your repo URL (public, or tell us how to get read access), the plan, and a contact email.</li>
+      <li><strong>We confirm scope</strong> in the issue (repo size, languages) before you pay anything.</li>
+      <li><strong>Pay in USDC on Base</strong> (chain ID 8453) to <code>0x26AB46a0309C3ab8F2f59754B3066e77E8154A34</code>:<br/>
+        <a class="btn alt" href="ethereum:0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913@8453/transfer?address=0x26AB46a0309C3ab8F2f59754B3066e77E8154A34&amp;uint256=79000000">Pay $79 USDC (wallet link)</a>
+        <a class="btn alt" href="ethereum:0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913@8453/transfer?address=0x26AB46a0309C3ab8F2f59754B3066e77E8154A34&amp;uint256=39000000">Pay $39 USDC (wallet link)</a><br/>
+        <span class="muted">Links use the EIP-681 format and open in compatible wallets (e.g. MetaMask mobile). Or send manually: token USDC <code>0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913</code> on Base. Post the transaction hash in your issue. Send only USDC on the Base network.</span></li>
+      <li><strong>Delivery:</strong> the report is attached to your issue (or emailed privately for private repos) after payment.</li>
+    </ol>
+  </div>
+</body>
+</html>
